@@ -1,5 +1,6 @@
 package ru.moskovka.airportbrowser.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -13,5 +14,5 @@ public interface Controller {
      * @param line the substring to be matched
      * @return lines which contain line
      */
-    List<List<String>> processQuery(int colIndex, String line);
+    List<List<String>> processQuery(int colIndex, String line) throws IOException;
 }

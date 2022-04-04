@@ -4,6 +4,7 @@ import ru.moskovka.airportbrowser.controller.AirportController;
 import ru.moskovka.airportbrowser.model.AirportModel;
 import ru.moskovka.airportbrowser.view.ConsoleMenu;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 
@@ -15,6 +16,11 @@ public class App {
                         new AirportModel(inputStream)
                 )
         );
-        menu.display(args);
+        try {
+            menu.display(args);
+        } catch (IOException e) {
+            System.out.println("Не удалось найти результат.");
+        }
+
     }
 }

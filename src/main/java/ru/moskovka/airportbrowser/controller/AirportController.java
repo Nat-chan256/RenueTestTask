@@ -1,15 +1,14 @@
 package ru.moskovka.airportbrowser.controller;
 
-import ru.moskovka.airportbrowser.model.AirportModel;
 import ru.moskovka.airportbrowser.model.Model;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AirportController implements Controller {
-    private Model model;
+    private final Model model;
 
-    public AirportController(Model model){
+    public AirportController(final Model model){
         this.model = model;
     }
 
@@ -21,9 +20,7 @@ public class AirportController implements Controller {
      * @return lines which contain line
      */
     @Override
-    public List<List<String>> processQuery(int colIndex, String line) {
-        List<List<String>> table = ((AirportModel)model).getTable();
-        return table.stream()
-                .filter((row) -> row.get(colIndex).contains(line)).collect(Collectors.toList());
+    public List<List<String>> processQuery(final int colIndex, final String line) throws IOException {
+        return model.getFiltered(colIndex, line);
     }
 }

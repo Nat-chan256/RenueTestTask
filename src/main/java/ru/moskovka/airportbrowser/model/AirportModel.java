@@ -10,57 +10,33 @@ import java.util.List;
  */
 public class AirportModel implements Model{
 
-    private String filename;
-    private InputStream inputStream;
-    private List<List<String>> table;
+    private final InputStream inputStream;
 
-    public AirportModel(InputStream inputStream){
+    public AirportModel(final InputStream inputStream){
         this.inputStream = inputStream;
-        try {
-            readTableFromFile();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
-    public AirportModel(String filename){
-        this.filename = filename;
-        try {
-            readTableFromFile();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public List<List<String>> getTable() {
-        return new ArrayList<>(table);
-    }
-
-    /**
-     * Accesses the column with colNumber index.
-     *
-     * @param colIndex the column to return.
-     * @return column with colNumber index.
-     */
     @Override
-    public String[] getColumn(int colIndex) {
-        String[] column = new String[table.size()];
-        for (int i = 0; i < table.size(); ++i)
-            column[i] = table.get(i).get(colIndex);
-        return column;
-    }
-
-    private void readTableFromFile() throws FileNotFoundException {
-        table = new ArrayList<>();
-        if (filename != null)
-            inputStream = new FileInputStream(new File(filename));
+    public List<List<String>> getFiltered(final int colIndex, final String prefix) throws IOException {
+        final List<List<String>> filtered = new ArrayList<>();
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))){
             String line;
             while ((line = reader.readLine()) != null){
-                table.add(Arrays.asList(line.split(",")));
+                String[] splitted = line.split(",");
+                if (splitted[colIndex].replace("\"", "").startsWith(prefix))
+                    insert(filtered, Arrays.asList(splitted), colIndex);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return filtered;
+    }
+
+    // Inserts element into list so that it keeps sorted
+    private void insert(final List<List<String>> list, final List<String> elem, final int indexToSortBy){
+        int index = 0;
+        String elemColValue = elem.get(indexToSortBy);
+        while (index < list.size() && list.get(index).get(indexToSortBy).compareTo(elemColValue) < 0)
+            index++;
+        list.add(index, elem);
     }
 }

@@ -15,8 +15,8 @@ public class PropertyReader {
     }
 
     private static Map<String, String> readMapFromYaml(String filename) throws IOException, NullPointerException {
-        InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(filename);
-        Map<String, String> content = new HashMap<>();
+        final InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(filename);
+        final Map<String, String> content = new HashMap<>();
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))){
             String line;
             while ((line = reader.readLine()) != null)
